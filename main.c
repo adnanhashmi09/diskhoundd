@@ -8,6 +8,10 @@
 
 #define ERR_TOO_FEW_ARGUMENTS 1
 #define EXT_ERR_INIT_LIBNOTIFY 2
+#define EXIT_ERR_DISK_STATUS_STAVFS 3
+
+#define NOTIFICATION_TIMEOUT (1000 * 60) // miliseconds
+#define SLEEP_TIME (60 * 60) // seconds
 #define GB (1024 * 1024 * 1024)
 
 char *ProgramTitle = "diskhound";
@@ -29,7 +33,7 @@ void make_notification(NotifyNotification **notify_handle,
   *notify_handle = notify_notification_new("Low Disk Space", notification_msg,
                                            "diaglog-information");
   notify_notification_set_urgency(*notify_handle, NOTIFY_URGENCY_CRITICAL);
-  notify_notification_set_timeout(*notify_handle, 2000);
+  notify_notification_set_timeout(*notify_handle, NOTIFICATION_TIMEOUT);
   notify_notification_show(*notify_handle, NULL);
 }
 
@@ -69,10 +73,10 @@ int main(int argc, char **argv) {
       clean_notification_handler(&notify_handle);
       fprintf(stdout, "notification made\nsleeping for 1 hour\n");
       fflush(stdout);
-      sleep(3);
+      sleep(SLEEP_TIME);
 
     } else {
-      exit(1);
+      exit(EXIT_ERR_DISK_STATUS_STAVFS);
     }
   }
 }
