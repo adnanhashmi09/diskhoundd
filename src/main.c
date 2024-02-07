@@ -7,21 +7,13 @@
 #include <sys/statvfs.h>
 #include <unistd.h>
 
-#define ERR_TOO_FEW_ARGUMENTS 1
-#define EXT_SUCCESS 0
-#define EXT_ERR_INIT_LIBNOTIFY 2
-#define EXIT_ERR_DISK_STATUS_STAVFS 3
+#include "exit_codes.h"
+#include "globals.h"
+#include "signal_handler.h"
 
-#define NOTIFICATION_TIMEOUT (1000 * 60) // miliseconds
-#define SLEEP_TIME (60 * 60)             // seconds
-#define GB (1024 * 1024 * 1024)
 
 char *ProgramTitle = "diskhound";
 
-void signal_handler(int signal){
-  fprintf(stdout, "\nSignal recieved. Cleaning up.\n");
-  exit(EXT_SUCCESS);
-}
 
 double get_free_disk_percentage(struct statvfs *stat) {
   unsigned long block_size = stat->f_frsize;
@@ -73,15 +65,19 @@ int main(int argc, char **argv) {
       if (free_space_perc > 20) {
         continue;
       }
+
       sprintf(notification_msg, "Disk space is less than %.0f%%",
               free_space_perc);
+
       notify_init_status = notify_init(ProgramTitle);
       if (!notify_init_status) {
         fprintf(stderr, "Error initialising with libnotify!\n");
         exit(EXT_ERR_INIT_LIBNOTIFY);
       }
+
       make_notification(&notify_handle, notification_msg);
       clean_notification_handler(&notify_handle);
+
       fprintf(stdout, "notification made\nsleeping for 1 hour\n");
       fflush(stdout);
       sleep(SLEEP_TIME);
