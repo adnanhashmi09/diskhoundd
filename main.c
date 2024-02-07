@@ -1,5 +1,6 @@
 #include <libnotify/notification.h>
 #include <libnotify/notify.h>
+#include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,14 +8,20 @@
 #include <unistd.h>
 
 #define ERR_TOO_FEW_ARGUMENTS 1
+#define EXT_SUCCESS 0
 #define EXT_ERR_INIT_LIBNOTIFY 2
 #define EXIT_ERR_DISK_STATUS_STAVFS 3
 
 #define NOTIFICATION_TIMEOUT (1000 * 60) // miliseconds
-#define SLEEP_TIME (60 * 60) // seconds
+#define SLEEP_TIME (60 * 60)             // seconds
 #define GB (1024 * 1024 * 1024)
 
 char *ProgramTitle = "diskhound";
+
+void signal_handler(int signal){
+  fprintf(stdout, "\nSignal recieved. Cleaning up.\n");
+  exit(EXT_SUCCESS);
+}
 
 double get_free_disk_percentage(struct statvfs *stat) {
   unsigned long block_size = stat->f_frsize;
@@ -54,6 +61,10 @@ int main(int argc, char **argv) {
 
   struct statvfs stat;
   const char *path = argv[1];
+
+  signal(SIGABRT, signal_handler);
+  signal(SIGINT, signal_handler);
+  signal(SIGTERM, signal_handler);
 
   while (true) {
     if (statvfs(path, &stat) == 0) {
