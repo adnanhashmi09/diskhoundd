@@ -1,4 +1,3 @@
-#include "exit_codes.h"
 #include <stdlib.h>
 #include "logger.h"
 
