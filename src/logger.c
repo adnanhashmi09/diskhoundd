@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 
-const char *log_file_path = "./diskhoundd.log";
+const char *log_file_path = "/var/log/diskhoundd.log";
 char *get_current_time() {
   time_t rawtime;
   struct tm *timeinfo;
