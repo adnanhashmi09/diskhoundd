@@ -1,0 +1,9 @@
+#ifndef EXT_CODES
+#define EXT_CODES
+
+#define ERR_TOO_FEW_ARGUMENTS 1
+#define EXT_SUCCESS 0
+#define EXT_ERR_INIT_LIBNOTIFY 2
+#define EXIT_ERR_DISK_STATUS_STAVFS 3
+
+#endif // !EXT_CODES
