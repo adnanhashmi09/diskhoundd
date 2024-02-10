@@ -1,7 +1,10 @@
 #include "logger.h"
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
+
+#include "exit_codes.h" 
 
 const char *log_file_path = "/var/log/diskhoundd.log";
 char *get_current_time() {
@@ -36,6 +39,10 @@ void Log(LogLevel level, const char *format, ...) {
   }
 
   FILE *file = fopen(log_file_path, "a");
+  if(file==NULL){
+    fprintf(stderr, "[ERROR] Cannot log open file '%s'\n", log_file_path);
+    exit(EXIT_LOG_FILE_ERROR);
+  }
   va_list args, args_copy;
 
   fprintf(file, "- (%s) [%s]: ", get_current_time(), level_string);
