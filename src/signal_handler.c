@@ -1,8 +1,8 @@
 #include "exit_codes.h"
-#include <stdio.h>
 #include <stdlib.h>
+#include "logger.h"
 
 void signal_handler(int signal){
-  fprintf(stdout, "\nSignal recieved. Cleaning up.\n");
+  Log(INFO, "Signal recieved. Cleaning up.\n");
   exit(EXT_SUCCESS);
 }

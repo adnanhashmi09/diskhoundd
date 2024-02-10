@@ -6,12 +6,13 @@
 
 #include "globals.h"
 #include "exit_codes.h"
+#include "logger.h"
 
 void init_notification(char* ProgramTitle) {
   bool notify_init_status;
   notify_init_status = notify_init(ProgramTitle);
   if (!notify_init_status) {
-    fprintf(stderr, "Error initialising with libnotify!\n");
+    Log(ERROR, "Error initialising with libnotify!\n");
     exit(EXT_ERR_INIT_LIBNOTIFY);
   }
 }
