@@ -13,7 +13,7 @@ void init_notification(char* ProgramTitle) {
   notify_init_status = notify_init(ProgramTitle);
   if (!notify_init_status) {
     Log(ERROR, "Error initialising with libnotify!\n");
-    exit(EXT_ERR_INIT_LIBNOTIFY);
+    exit(EXIT_ERR_INIT_LIBNOTIFY);
   }
 }
 

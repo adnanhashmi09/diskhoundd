@@ -4,5 +4,5 @@
 
 void signal_handler(int signal){
   Log(INFO, "Signal recieved. Cleaning up.\n");
-  exit(EXT_SUCCESS);
+  exit(EXIT_SUCCESS);
 }
