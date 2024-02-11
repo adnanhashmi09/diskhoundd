@@ -18,8 +18,8 @@ int main(int argc, char **argv) {
   register_exit_signals();
 
   struct Config *config = init_config(config_file_path);
-  printf("%s\n", config->log_file_path);
-  printf("%s\n", config->config_file_path);
+  // printf("%s\n", config->log_file_path);
+  // printf("%s\n", config->config_file_path);
   // printf("%s\n", config->icon_path);
   return 0;
 

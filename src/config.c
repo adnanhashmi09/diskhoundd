@@ -22,11 +22,15 @@ void trim(char **line) {
 }
 
 void set_value_if_valid_key(char *key, char *value, struct Config *config) {
-  if (strcmp(key, "log_file_path") == 0)
-    config->log_file_path = value;
+  if (strcmp(key, "log_file_path") == 0) {
+    // free((char *)config->log_file_path);
+    config->log_file_path = strdup(value);
+  }
 
-  if (strcmp(key, "icon_path") == 0)
-    config->icon_path = value;
+  if (strcmp(key, "icon_path") == 0) {
+    // free((char *)config->icon_path);
+    config->icon_path = strdup(value);
+  }
 }
 
 struct Config *init_config(const char *config_file) {
@@ -59,9 +63,9 @@ struct Config *init_config(const char *config_file) {
     if (key != NULL && value != NULL) {
       trim(&key);
       trim(&value);
+      // printf("%s->%s\n", key, value);
       set_value_if_valid_key(key, value, config);
-      printf("%s->%s\n", key, value);
-      printf("%s->%s\n", key, config->log_file_path);
+      // printf("%s->%s\n", key, config->log_file_path);
     }
   }
 
