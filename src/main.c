@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
   NotifyNotification *notify_handle;
   if (argc < 2) {
-    Log(ERROR, "USAGE: diskhound [PATH]\n");
+    Log(ERROR, "USAGE: diskhoundd [PATH]\n");
     exit(ERR_TOO_FEW_ARGUMENTS);
   }
 

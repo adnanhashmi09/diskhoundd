@@ -1,14 +1,15 @@
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <libnotify/notification.h>
 #include <libnotify/notify.h>
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-#include "globals.h"
 #include "exit_codes.h"
+#include "globals.h"
 #include "logger.h"
 
-void init_notification(char* ProgramTitle) {
+void init_notification(char *ProgramTitle) {
   bool notify_init_status;
   notify_init_status = notify_init(ProgramTitle);
   if (!notify_init_status) {
@@ -21,9 +22,12 @@ void make_notification(NotifyNotification **notify_handle,
                        char *notification_msg) {
 
   *notify_handle = notify_notification_new("Diskhound", notification_msg,
-                                           "diaglog-information");
+                                           "dialog-information-symbolic");
   notify_notification_set_urgency(*notify_handle, NOTIFY_URGENCY_CRITICAL);
   notify_notification_set_timeout(*notify_handle, NOTIFICATION_TIMEOUT);
+  notify_notification_set_icon_from_pixbuf(
+      *notify_handle,
+      gdk_pixbuf_new_from_file("/home/adnan/data/Code/daemons/diskhound/storage.svg", NULL));
   notify_notification_show(*notify_handle, NULL);
 }
 
