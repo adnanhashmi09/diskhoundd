@@ -22,7 +22,7 @@ void make_notification(NotifyNotification **notify_handle,
                        char *notification_msg) {
 
   *notify_handle = notify_notification_new("Diskhound", notification_msg,
-                                           "dialog-information-symbolic");
+                                           "dialog-error-symbolic");
   notify_notification_set_urgency(*notify_handle, NOTIFY_URGENCY_CRITICAL);
   notify_notification_set_timeout(*notify_handle, NOTIFICATION_TIMEOUT);
   notify_notification_set_icon_from_pixbuf(

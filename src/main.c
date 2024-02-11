@@ -1,80 +1,30 @@
-#include <libnotify/notification.h>
-#include <libnotify/notify.h>
-#include <signal.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/statvfs.h>
-#include <unistd.h>
 
-#include "exit_codes.h"
-#include "globals.h"
+#include "cli.h"
+#include "config.h"
 #include "logger.h"
-#include "notification_handler.h"
 #include "signal_handler.h"
+#include "watchdog.h"
 
 char *ProgramTitle = "diskhound";
 
-double get_free_disk_percentage(struct statvfs *stat) {
-  unsigned long block_size = stat->f_frsize;
-  unsigned long free_size = block_size * (stat->f_bavail);
-
-  double free_size_gb = (double)free_size / GB;
-  double total_size_gb = (double)(stat->f_bsize * stat->f_blocks) / GB;
-
-  double free_space_perc = (free_size_gb / total_size_gb) * 100;
-  return free_space_perc;
-}
-
 int main(int argc, char **argv) {
-  Log(INFO, "Diskhound Started.\n");
-  char *notification_msg = (char *)malloc(150 * sizeof(char));
+  const char *config_file_path = NULL;
+  const char *path = NULL;
 
-  NotifyNotification *notify_handle;
-  if (argc < 2) {
-    Log(ERROR, "USAGE: diskhoundd [PATH]\n");
-    exit(ERR_TOO_FEW_ARGUMENTS);
-  }
+  init_cli(argc, argv, &config_file_path, &path);
+  register_exit_signals();
+
+  struct Config *config = init_config(config_file_path);
+  printf("%s\n", config->log_file_path);
+  printf("%s\n", config->config_file_path);
+  // printf("%s\n", config->icon_path);
+  return 0;
+
+  init_logger(config->log_file_path);
 
   struct statvfs stat;
-  const char *path = argv[1];
-
-  signal(SIGABRT, signal_handler);
-  signal(SIGINT, signal_handler);
-  signal(SIGTERM, signal_handler);
-
-  while (true) {
-    if (statvfs(path, &stat) == 0) {
-
-      double free_space_perc = get_free_disk_percentage(&stat);
-      if (free_space_perc > 20) {
-        continue;
-      }
-
-      sprintf(notification_msg, "Disk space is less than %.0f%%",
-              free_space_perc);
-
-      Log(INFO, "'%s' - %s\n", path, notification_msg);
-
-      sleep(5);
-
-      init_notification(ProgramTitle);
-      make_notification(&notify_handle, notification_msg);
-      clean_notification_handler(&notify_handle);
-
-      Log(INFO, "notification made\nsleeping for 1 hour\n");
-      sleep(SLEEP_TIME);
-      continue;
-    }
-
-    sprintf(notification_msg, "Error reading path \"%s\"", path);
-    Log(ERROR, "%s\n", notification_msg);
-
-    init_notification(ProgramTitle);
-    make_notification(&notify_handle, notification_msg);
-    clean_notification_handler(&notify_handle);
-
-    Log(INFO, "Exiting Diskhound\n");
-    exit(EXIT_ERR_DISK_STATUS_STAVFS);
-  }
+  watchdog_start(&path, &ProgramTitle, &stat);
 }

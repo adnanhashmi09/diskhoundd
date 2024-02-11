@@ -6,7 +6,7 @@
 
 #include "exit_codes.h" 
 
-const char *log_file_path = "/var/log/diskhoundd.log";
+const char *log_file_path = "./diskhoundd.log";
 char *get_current_time() {
   time_t rawtime;
   struct tm *timeinfo;
@@ -17,6 +17,10 @@ char *get_current_time() {
   strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", timeinfo);
 
   return buffer;
+}
+
+void init_logger(const char* log_file){
+  log_file_path = log_file;
 }
 
 void Log(LogLevel level, const char *format, ...) {
