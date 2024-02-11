@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "config.h"
 #include "exit_codes.h"
 #include "globals.h"
 #include "logger.h"
@@ -25,9 +26,10 @@ void make_notification(NotifyNotification **notify_handle,
                                            "dialog-error-symbolic");
   notify_notification_set_urgency(*notify_handle, NOTIFY_URGENCY_CRITICAL);
   notify_notification_set_timeout(*notify_handle, NOTIFICATION_TIMEOUT);
-  notify_notification_set_icon_from_pixbuf(
-      *notify_handle,
-      gdk_pixbuf_new_from_file("/home/adnan/data/Code/daemons/diskhound/storage.svg", NULL));
+  if (config.icon_path != NULL) {
+    notify_notification_set_icon_from_pixbuf(
+        *notify_handle, gdk_pixbuf_new_from_file(config.icon_path, NULL));
+  }
   notify_notification_show(*notify_handle, NULL);
 }
 

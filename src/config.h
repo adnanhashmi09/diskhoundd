@@ -7,6 +7,7 @@ struct Config {
   const char* icon_path;
 };
 
-struct Config *init_config(const char* config_file_path);
+void init_config(const char* config_file_path);
+extern struct Config config;
 
 #endif // !CONFIG

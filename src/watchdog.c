@@ -22,14 +22,14 @@ void watchdog_start(const char** path, char** ProgramTitle, struct statvfs *stat
     if (statvfs(*path, stat) == 0) {
 
       double free_space_perc = get_free_disk_percentage(stat);
-      if (free_space_perc > 80) {
+      if (free_space_perc > 20) {
         continue;
       }
 
       sprintf(notification_msg, "Disk space is less than %.0f%%",
               free_space_perc);
 
-      Log(INFO, "'%s' - %s\n", path, notification_msg);
+      Log(INFO, "'%s' - %s\n", *path, notification_msg);
 
       sleep(5);
 
@@ -37,7 +37,8 @@ void watchdog_start(const char** path, char** ProgramTitle, struct statvfs *stat
       make_notification(&notify_handle, notification_msg);
       clean_notification_handler(&notify_handle);
 
-      Log(INFO, "notification made\nsleeping for 1 hour\n");
+      Log(INFO, "notification made\n");
+      Log(INFO, "sleeping for 1 hour\n");
       sleep(SLEEP_TIME);
       continue;
     }

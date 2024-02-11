@@ -17,13 +17,9 @@ int main(int argc, char **argv) {
   init_cli(argc, argv, &config_file_path, &path);
   register_exit_signals();
 
-  struct Config *config = init_config(config_file_path);
-  // printf("%s\n", config->log_file_path);
-  // printf("%s\n", config->config_file_path);
-  // printf("%s\n", config->icon_path);
-  return 0;
+  init_config(config_file_path);
 
-  init_logger(config->log_file_path);
+  init_logger(config.log_file_path);
 
   struct statvfs stat;
   watchdog_start(&path, &ProgramTitle, &stat);
