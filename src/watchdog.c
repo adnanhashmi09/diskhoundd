@@ -11,6 +11,7 @@
 #include "logger.h"
 #include "notification_handler.h"
 #include "disk_space_utils.h"
+#include "config.h"
 
 void watchdog_start(const char** path, char** ProgramTitle, struct statvfs *stat){
 
@@ -22,7 +23,7 @@ void watchdog_start(const char** path, char** ProgramTitle, struct statvfs *stat
     if (statvfs(*path, stat) == 0) {
 
       double free_space_perc = get_free_disk_percentage(stat);
-      if (free_space_perc > 20) {
+      if (free_space_perc > config.critical_disk_perc) {
         continue;
       }
 

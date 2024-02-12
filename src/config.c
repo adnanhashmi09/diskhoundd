@@ -31,10 +31,14 @@ void set_value_if_valid_key(char *key, char *value) {
   if (strcmp(key, "icon_path") == 0) {
     config.icon_path = strdup(value);
   }
+  if (strcmp(key, "critical_disk_perc") == 0) {
+    config.critical_disk_perc = atoi(value);
+  }
 }
 
 void init_config(const char *config_file) {
   config.log_file_path = "/var/log/diskhoundd.log";
+  config.critical_disk_perc = 20;
   config.config_file_path = NULL;
   config.icon_path = NULL;
 
