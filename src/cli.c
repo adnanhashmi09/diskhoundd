@@ -3,15 +3,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "config.h"
 #include "exit_codes.h"
-int init_cli(int argc, char **argv, const char **config_file_path,
-             char ***paths) {
+void init_cli(int argc, char **argv) {
+  char *config_file_path = NULL;
+  char **paths = NULL;
 
   int opt;
   while ((opt = getopt(argc, argv, "c:")) != -1) {
     switch (opt) {
     case 'c':
-      *config_file_path = optarg;
+      config_file_path = optarg;
       break;
     case '?':
       if (optopt == 'c') {
@@ -35,15 +37,15 @@ int init_cli(int argc, char **argv, const char **config_file_path,
     exit(EXIT_WRONG_ARGUMENTS);
   }
 
-  *paths = (char **)malloc((argc - optind) * sizeof(char *));
-  if (*paths == NULL) {
+  paths = (char **)malloc((argc - optind) * sizeof(char *));
+  if (paths == NULL) {
     perror("Memory allocation failed");
     exit(EXIT_FAILURE);
   }
 
   for (int i = optind; i < argc; i++) {
-    (*paths)[i - optind] = argv[i];
+    paths[i - optind] = argv[i];
   }
 
-  return argc - optind;
+  init_config(&config_file_path, &paths, argc - optind);
 }

@@ -36,7 +36,7 @@ void set_value_if_valid_key(char *key, char *value) {
   }
 }
 
-void init_config(const char *config_file, int number_of_paths) {
+void init_config(char **config_file, char ***paths, int number_of_paths) {
   config.log_file_path = "/var/log/diskhoundd.log";
   config.critical_disk_perc = 20;
   config.path_list_size = number_of_paths;
@@ -47,12 +47,31 @@ void init_config(const char *config_file, int number_of_paths) {
     return;
   }
 
-  FILE *file = fopen(config_file, "r");
+  FILE *file = fopen(*config_file, "r");
   if (file == NULL) {
-    fprintf(stderr, "config file %s not found.\n", config_file);
+    fprintf(stderr, "config file %s not found.\n", *config_file);
     exit(EXIT_CONFIG_FILE_NOT_FOUND);
   }
-  config.config_file_path = config_file;
+  config.config_file_path = strdup(*config_file);
+  // free(*config_file);
+
+  config.paths =
+      (const char **)malloc(config.path_list_size * sizeof(const char *));
+
+  if (config.paths == NULL) {
+    perror("Memory allocation failed");
+    exit(EXIT_FAILURE);
+  }
+
+
+  for (int i = 0; i < config.path_list_size; i++) {
+    config.paths[i] = strdup((*paths)[i]);
+    if (config.paths[i] == NULL) {
+      perror("Memory allocation failed");
+      exit(EXIT_FAILURE);
+    }
+    // free((*paths)[i]);
+  }
 
   char line[MAX_CONFIG_LINE_LENGTH];
   while (fgets(line, sizeof(line), file)) {

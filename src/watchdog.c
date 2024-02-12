@@ -13,7 +13,7 @@
 #include "logger.h"
 #include "notification_handler.h"
 
-void watchdog_start(char ***paths, char **ProgramTitle) {
+void watchdog_start(char **ProgramTitle) {
 
   char *notification_msg = (char *)malloc(150 * sizeof(char));
   NotifyNotification *notify_handle;
@@ -25,7 +25,7 @@ void watchdog_start(char ***paths, char **ProgramTitle) {
 
   while (true) {
     for (size_t i = 0; i < config.path_list_size; i++) {
-      char *path = (*paths)[i];
+      const char *path = config.paths[i];
 
       if (statvfs(path, &stat) == 0) {
 

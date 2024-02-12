@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/statvfs.h>
 
 #include "cli.h"
@@ -11,15 +9,9 @@
 char *ProgramTitle = "diskhound";
 
 int main(int argc, char **argv) {
-  const char *config_file_path = NULL;
-  char **paths = NULL;
-
-  int number_of_paths = init_cli(argc, argv, &config_file_path, &paths);
+  init_cli(argc, argv);
   register_exit_signals();
-
-  init_config(config_file_path, number_of_paths);
-
   init_logger(config.log_file_path);
-
-  watchdog_start(&paths, &ProgramTitle);
+  watchdog_start(&ProgramTitle);
+  // TODO: FREE MEMORY WHERE NECESSARY
 }
