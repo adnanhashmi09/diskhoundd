@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "config.h"
 #include "exit_codes.h"
@@ -26,7 +27,7 @@ void make_notification(NotifyNotification **notify_handle,
                                            "dialog-error-symbolic");
   notify_notification_set_urgency(*notify_handle, NOTIFY_URGENCY_CRITICAL);
   notify_notification_set_timeout(*notify_handle, NOTIFICATION_TIMEOUT);
-  if (config.icon_path != NULL) {
+  if (config.icon_path != NULL && access(config.icon_path, R_OK) != -1) {
     notify_notification_set_icon_from_pixbuf(
         *notify_handle, gdk_pixbuf_new_from_file(config.icon_path, NULL));
   }
