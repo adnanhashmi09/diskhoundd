@@ -12,14 +12,14 @@ char *ProgramTitle = "diskhound";
 
 int main(int argc, char **argv) {
   const char *config_file_path = NULL;
-  const char *path = NULL;
+  char **paths = NULL;
 
-  init_cli(argc, argv, &config_file_path, &path);
+  int number_of_paths = init_cli(argc, argv, &config_file_path, &paths);
   register_exit_signals();
 
-  init_config(config_file_path);
+  init_config(config_file_path, number_of_paths);
 
   init_logger(config.log_file_path);
 
-  watchdog_start(&path, &ProgramTitle);
+  watchdog_start(&paths, &ProgramTitle);
 }

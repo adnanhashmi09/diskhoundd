@@ -1,10 +1,11 @@
-#include<unistd.h>
-#include<stdlib.h>
-#include<stdio.h>
-#include<ctype.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #include "exit_codes.h"
-void init_cli(int argc, char** argv, const char** config_file_path, const char** path){
+int init_cli(int argc, char **argv, const char **config_file_path,
+             char ***paths) {
 
   int opt;
   while ((opt = getopt(argc, argv, "c:")) != -1) {
@@ -34,5 +35,15 @@ void init_cli(int argc, char** argv, const char** config_file_path, const char**
     exit(EXIT_WRONG_ARGUMENTS);
   }
 
-  *path = argv[optind];
+  *paths = (char **)malloc((argc - optind) * sizeof(char *));
+  if (*paths == NULL) {
+    perror("Memory allocation failed");
+    exit(EXIT_FAILURE);
+  }
+
+  for (int i = optind; i < argc; i++) {
+    (*paths)[i - optind] = argv[i];
+  }
+
+  return argc - optind;
 }
