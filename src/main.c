@@ -21,6 +21,5 @@ int main(int argc, char **argv) {
 
   init_logger(config.log_file_path);
 
-  struct statvfs stat;
-  watchdog_start(&path, &ProgramTitle, &stat);
+  watchdog_start(&path, &ProgramTitle);
 }

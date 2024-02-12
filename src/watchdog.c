@@ -13,16 +13,17 @@
 #include "disk_space_utils.h"
 #include "config.h"
 
-void watchdog_start(const char** path, char** ProgramTitle, struct statvfs *stat){
+void watchdog_start(const char** path, char** ProgramTitle){
 
   char *notification_msg = (char *)malloc(150 * sizeof(char));
   NotifyNotification *notify_handle;
 
+  struct statvfs stat;
   Log(INFO, "Diskhound Started.\n");
   while (true) {
-    if (statvfs(*path, stat) == 0) {
+    if (statvfs(*path, &stat) == 0) {
 
-      double free_space_perc = get_free_disk_percentage(stat);
+      double free_space_perc = get_free_disk_percentage(&stat);
       if (free_space_perc > config.critical_disk_perc) {
         continue;
       }
