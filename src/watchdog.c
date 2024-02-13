@@ -1,27 +1,34 @@
 #include <libnotify/notification.h>
 #include <libnotify/notify.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/statvfs.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "config.h"
 #include "disk_space_utils.h"
 #include "exit_codes.h"
+#include "globals.h"
 #include "logger.h"
 #include "notification_handler.h"
 
 void watchdog_start(char **ProgramTitle) {
+
+  time_t *notification_made_at =
+      (time_t *)calloc(config.path_list_size, sizeof(time_t));
+
+  if (notification_made_at == NULL) {
+    perror("Memory allocation failed");
+    exit(EXIT_FAILURE);
+  }
 
   char *notification_msg = (char *)malloc(150 * sizeof(char));
   NotifyNotification *notify_handle;
 
   struct statvfs stat;
   Log(INFO, "Diskhound Started.\n");
-  uint8_t *is_notified =
-      (uint8_t *)calloc(config.path_list_size, sizeof(uint8_t));
 
   while (true) {
     for (size_t i = 0; i < config.path_list_size; i++) {
@@ -30,7 +37,10 @@ void watchdog_start(char **ProgramTitle) {
       if (statvfs(path, &stat) == 0) {
 
         double free_space_perc = get_free_disk_percentage(&stat);
-        if (free_space_perc > config.critical_disk_perc || is_notified[i] == 1) {
+
+        time_t curr_time = time(NULL);
+        if (free_space_perc > config.critical_disk_perc || 
+            (curr_time - notification_made_at[i] <= ONE_HOUR)) {
           continue;
         }
 
@@ -46,7 +56,7 @@ void watchdog_start(char **ProgramTitle) {
         clean_notification_handler(&notify_handle);
 
         Log(INFO, "notification made\n");
-        is_notified[i]=1;
+        notification_made_at[i] = curr_time;
         continue;
       }
 
