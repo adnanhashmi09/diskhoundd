@@ -70,5 +70,6 @@ void watchdog_start(char **ProgramTitle) {
       Log(INFO, "Exiting Diskhound\n");
       exit(EXIT_ERR_DISK_STATUS_STAVFS);
     }
+    sleep(15);
   }
 }
