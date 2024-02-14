@@ -39,12 +39,12 @@ void watchdog_start(char **ProgramTitle) {
         double free_space_perc = get_free_disk_percentage(&stat);
 
         time_t curr_time = time(NULL);
-        if (free_space_perc > config.critical_disk_perc || 
+        if (free_space_perc > config.critical_disk_perc ||
             (curr_time - notification_made_at[i] <= ONE_HOUR)) {
           continue;
         }
 
-        sprintf(notification_msg, "Disk space is less than %.0f%%",
+        sprintf(notification_msg, "(%s) - Disk space is less than %.0f%%", path,
                 free_space_perc);
 
         Log(INFO, "'%s' - %s\n", path, notification_msg);
