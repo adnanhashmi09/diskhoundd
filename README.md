@@ -30,13 +30,14 @@ Diskhoundd is a Linux daemon designed to monitor disk space usage and provide al
    sudo systemctl start diskhoundd.service 
    ```
 
-## Manual installation 🚀
+## Usage 🚀
 
 To run Diskhoundd, use the following command:
 
 ```bash
-diskhoundd -c /path/to/diskhoundd.cfg /path/to/mount/point1 /path/to/mount/point2 ...
+./build/diskhoundd -c /path/to/diskhoundd.cfg /path/to/mount/point1 /path/to/mount/point2 ...
 ```
+or copy `./build/diskhoundd` executable to `/usr/bin/` to simple use `diskhoundd` command
 
 ### Configuration File Options ⚙️
 
@@ -64,13 +65,36 @@ Diskhoundd can be run as a systemd service using the provided `diskhoundd.servic
    sudo cp diskhoundd.service /etc/systemd/system/
    ```
 
-2. Reload systemd to load the new service:
+   Content of the diskhoundd.service file is as follows:
+   ```ini
+   [Unit]
+   Description=Diskhound Daemon
+   [Service]
+   Type=Simple
+   ExecStart=/usr/bin/diskhoundd -c /etc/diskhoundd/diskhoundd.cfg /
+   Restart=always
+   User=root
+   Group=root
+   Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+   [Install]
+   WantedBy=multi-user.target
+   ```
+2. Copy `session-local.conf` to `/etc/dbus-1` if you want to run this daemon as root.
+   ```
+    <busconfig>
+      <policy context="mandatory">
+        <allow user="root"/>
+      </policy>
+    </busconfig>
+   ```
+
+3. Reload systemd to load the new service:
 
    ```bash
    sudo systemctl daemon-reload
    ```
 
-3. Enable and start the service:
+4. Enable and start the service:
 
    ```bash
    sudo systemctl enable diskhoundd
