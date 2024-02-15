@@ -1,3 +1,6 @@
+
+<img height="200px" width="200px" src="https://github.com/adnanhashmi09/diskhoundd/assets/56730784/0e2be154-be68-484a-ad95-3a2d8c12c227">
+
 # Diskhoundd
 
 Diskhoundd is a Linux daemon designed to monitor disk space usage and provide alerts when the disk space falls below a certain threshold. It can be configured via a configuration file and can watch multiple mount paths for disk space utilization.
