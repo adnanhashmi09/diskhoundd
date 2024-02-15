@@ -7,7 +7,7 @@ Diskhoundd is a Linux daemon designed to monitor disk space usage and provide al
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/diskhoundd.git
+   git clone https://github.com/adnanhashmi09/diskhoundd
    ```
 
 2. Compile the source code:
