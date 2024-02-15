@@ -1,5 +1,8 @@
+<p align="center" width="100%">
+  <img src="https://github.com/adnanhashmi09/diskhoundd/blob/main/assets/diskhoundd-small.png?raw=true" height="250px" width="250px">
+<!--     <img width="33%" src="https://i.stack.imgur.com/RJj4x.png"> -->
+</p>
 
-<img height="200px" width="200px" src="https://github.com/adnanhashmi09/diskhoundd/assets/56730784/0e2be154-be68-484a-ad95-3a2d8c12c227">
 
 # Diskhoundd
 
