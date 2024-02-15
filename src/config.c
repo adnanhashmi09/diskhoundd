@@ -43,17 +43,6 @@ void init_config(char **config_file, char ***paths, int number_of_paths) {
   config.config_file_path = NULL;
   config.icon_path = NULL;
 
-  if (config_file == NULL) {
-    return;
-  }
-
-  FILE *file = fopen(*config_file, "r");
-  if (file == NULL) {
-    fprintf(stderr, "config file %s not found.\n", *config_file);
-    exit(EXIT_CONFIG_FILE_NOT_FOUND);
-  }
-  config.config_file_path = strdup(*config_file);
-  // free(*config_file);
 
   config.paths =
       (const char **)malloc(config.path_list_size * sizeof(const char *));
@@ -70,8 +59,19 @@ void init_config(char **config_file, char ***paths, int number_of_paths) {
       perror("Memory allocation failed");
       exit(EXIT_FAILURE);
     }
-    // free((*paths)[i]);
   }
+
+  if (*config_file == NULL) {
+    printf("No config file found. Using default configurations");
+    return;
+  }
+
+  FILE *file = fopen(*config_file, "r");
+  if (file == NULL) {
+    fprintf(stderr, "config file %s not found.\n", *config_file);
+    exit(EXIT_CONFIG_FILE_NOT_FOUND);
+  }
+  config.config_file_path = strdup(*config_file);
 
   char line[MAX_CONFIG_LINE_LENGTH];
   while (fgets(line, sizeof(line), file)) {
