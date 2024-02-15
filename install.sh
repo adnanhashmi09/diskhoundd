@@ -21,6 +21,9 @@ echo "💾 diskhoundd binary installed."
 install -m 644 diskhoundd.service /etc/systemd/system/diskhoundd.service
 echo "🛠️ Registering diskhoundd as a systemd service."
 
+install -m 644 session-local.conf /etc/dbus-1/session-local.conf
+echo "🚌 Registering dbus configuration."
+
 # Create directory for configuration file if it doesn't exist
 mkdir -p /etc/diskhoundd
 
