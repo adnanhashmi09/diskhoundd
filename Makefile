@@ -18,5 +18,9 @@ $(EXECUTABLE): $(OBJS)
 clean:
 	rm -rf $(BUILDDIR)
 
+.PHONY: install
+install: $(EXECUTABLE)
+	sudo ./install.sh
+
 run: $(EXECUTABLE)
 	./$(EXECUTABLE) /

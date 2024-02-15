@@ -3,7 +3,7 @@ Description=Diskhound Daemon
 
 [Service]
 Type=Simple
-ExecStart=/usr/bin/diskhoundd /
+ExecStart=/usr/bin/diskhoundd -c /etc/diskhoundd/diskhoundd.cfg /
 Restart=always
 User=root
 Group=root
